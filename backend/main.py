@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Use Gemini API
-GEMINI_API_KEY = z""
+GEMINI_API_KEY = ""
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
 app = FastAPI(title="PERU Travel Chatbot API")
