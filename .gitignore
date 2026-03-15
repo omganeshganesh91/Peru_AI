@@ -1,0 +1,39 @@
+t
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Dependencies
+Pipfile.lock
+requirements.txt  # if you want to commit it, remove this
+
+# API keys and secrets
+GEMINI_API_KEY*
+
+# Build
+dist/
+build/
+*.egg-info/
+
