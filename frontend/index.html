@@ -2,19 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PERU – Travel Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="chat-container">
-  <h2>🌍 PERU – Travel Itinerary Assistant</h2>
+<div class="app-shell">
 
-  <div id="chatBox" class="chat-box"></div>
+  <!-- HEADER -->
+  <div class="chat-header">
+    <div class="avatar-wrap">
+      <div class="avatar">🌎</div>
+      <span class="online-dot"></span>
+    </div>
+    <div class="header-info">
+      <div class="header-name">PERU Assistant</div>
+      <div class="header-status">Online · Travel Expert</div>
+    </div>
+    <div class="header-icons">
+      <button class="icon-btn" title="Search">🔍</button>
+      <button class="icon-btn" title="More">⋮</button>
+    </div>
+  </div>
 
-  <div class="input-area">    
-    <input type="text" id="userInput" placeholder="Ask about travel plans, destinations, tips...">
-    <button onclick="sendMessage()">Send</button>
+  <!-- CHAT BODY -->
+  <div id="chatBox" class="chat-box">
+    <div class="date-divider"><span>Today</span></div>
+    <!-- Welcome bubble injected by JS -->
+  </div>
+
+  <!-- QUICK EMOJI PANEL -->
+  <div class="emoji-panel" id="emojiPanel">
+    <span class="emoji-opt" data-emoji="✈️">✈️</span>
+    <span class="emoji-opt" data-emoji="🏔️">🏔️</span>
+    <span class="emoji-opt" data-emoji="🗺️">🗺️</span>
+    <span class="emoji-opt" data-emoji="🏨">🏨</span>
+    <span class="emoji-opt" data-emoji="🍽️">🍽️</span>
+    <span class="emoji-opt" data-emoji="🎒">🎒</span>
+    <span class="emoji-opt" data-emoji="📸">📸</span>
+    <span class="emoji-opt" data-emoji="💰">💰</span>
+    <span class="emoji-opt" data-emoji="🌿">🌿</span>
+    <span class="emoji-opt" data-emoji="🐦">🐦</span>
+    <span class="emoji-opt" data-emoji="🎉">🎉</span>
+    <span class="emoji-opt" data-emoji="👍">👍</span>
+  </div>
+
+  <!-- QUICK REPLIES -->
+  <div class="quick-replies" id="quickReplies">
+    <button class="qr-btn" data-text="Best places to visit in Peru?">📍 Top Places</button>
+    <button class="qr-btn" data-text="What is the best time to visit Peru?">📅 Best Time</button>
+    <button class="qr-btn" data-text="How to plan a Machu Picchu trip?">🏔️ Machu Picchu</button>
+    <button class="qr-btn" data-text="What food should I try in Peru?">🍽️ Food Guide</button>
+    <button class="qr-btn" data-text="Visa requirements for Peru">📄 Visa Info</button>
+  </div>
+
+  <!-- INPUT BAR -->
+  <div class="input-bar">
+    <button class="attach-btn" id="emojiToggle" title="Emoji">😊</button>
+
+    <label class="attach-btn" title="Attach PDF" for="pdfUpload">
+      📎
+      <input type="file" id="pdfUpload" accept=".pdf,image/*" hidden>
+    </label>
+
+    <div class="input-wrap">
+      <input
+        type="text"
+        id="userInput"
+        placeholder="Message PERU Assistant..."
+        autocomplete="off"
+      >
+    </div>
+
+    <button class="send-btn" id="sendBtn" title="Send">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+      </svg>
+    </button>
+  </div>
+
+</div>
+
+<!-- PDF preview modal -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span>📄 Attached File</span>
+      <button id="closeModal">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button id="sendFileBtn">Send & Ask AI</button>
+    </div>
   </div>
 </div>
 

@@ -6,11 +6,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from google import genai
 
 load_dotenv()
 
-# Use Gemini API
-GEMINI_API_KEY = "AIzaSyCGUCk1Xr9PWLVI7L4iUCNphjZw3cIXwCQ"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+print(GEMINI_API_KEY)
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
 app = FastAPI(title="PERU Travel Chatbot API")
@@ -38,6 +39,11 @@ def chat(req: ChatRequest):
     if not user_question:
         return {"answer": "Please ask a travel-related question."}
 
+        # The client gets the API key from the environment variable `GEMINI_API_KEY`.
+    client = genai.Client()
+
+   
+    
     system_prompt = (
         "You are PERU, a travel assistant chatbot.\n"
         "ONLY answer travel-related questions like trip plans, itinerary, places, hotels, budget, transport, food, visa, weather, safety, travel news.\n"
@@ -45,38 +51,49 @@ def chat(req: ChatRequest):
         "Keep answers short and helpful.\n"
     )
 
-    payload = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": system_prompt + "\n\nUser: " + user_question}
-                ]
-            }
-        ]
-    }
+    response = client.models.generate_content(
+        model="gemini-3-flash-preview", contents= system_prompt + """\n""" + user_question
+    )
+    print("This is the resposne: ", response)
+    if response.text:
+        return {"answer":response.text}
+    else:
+        return {"answer":"Some error buddy"}
 
-    try:
-        r = requests.post(GEMINI_URL, json=payload, timeout=20)
+    # payload = {
+    #     "contents": [
+    #         {
+    #             "parts": [
+    #                 {"text": system_prompt + "\n\nUser: " + user_question}
+    #             ]
+    #         }
+    #     ]
+    # }
 
-        # ✅ If Gemini returns error, show full response
-        if r.status_code != 200:
-            return {
-                "answer": "❌ Gemini API Error",
-                "status_code": r.status_code,
-                "details": r.text
-            }
+    # try:
+    #     r = requests.post(GEMINI_URL, json=payload, timeout=20)
 
-        data = r.json()
+    #     print(r)
+    #     # ✅ If Gemini returns error, show full response
+    #     if r.status_code != 200:
+    #         return {
+    #             "answer": "❌ Gemini API Error",
+    #             "status_code": r.status_code,
+    #             "details": r.text
+    #         }
+
+    #     data = r.json()
         
-        # Check if response has the expected structure
-        if "candidates" not in data or not data["candidates"]:
-            return {"answer": "❌ Empty response from Gemini API", "details": str(data)}
+    #     # Check if response has the expected structure
+    #     if "candidates" not in data or not data["candidates"]:
+    #         return {"answer": "❌ Empty response from Gemini API", "details": str(data)}
         
-        answer = data["candidates"][0]["content"]["parts"][0]["text"]
-        return {"answer": answer}
+    #     answer = data["candidates"][0]["content"]["parts"][0]["text"]
+    #     return {"answer": answer}
 
-    except Exception as e:
-        return {"answer": "❌ Error contacting Gemini API", "error": str(e)}
+    # except Exception as e:
+    #     return {"answer": "❌ Error contacting Gemini API", "error": str(e)}
 
 # ✅ Serve frontend files (after routes to avoid conflicts)
 app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "../frontend"), html=True), name="frontend")
+print("Start")
